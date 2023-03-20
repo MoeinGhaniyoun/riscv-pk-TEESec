@@ -1,0 +1,13 @@
+user_program_subproject_deps = \
+
+user_program_hdrs = \
+
+user_program_c_srcs = \
+
+user_program_asm_srcs = \
+  user_entry.S \
+
+user_program_test_srcs =
+
+user_program_install_prog_srcs = \
+  user_program.c \

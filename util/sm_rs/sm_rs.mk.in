@@ -1,0 +1,30 @@
+sm_rs_hdrs = \
+  sm.h \
+  sm-sbi.h \
+
+sm_rs_c_srcs = \
+  sm-sbi.c \
+  thread.c \
+  pmp.c \
+  sha3/sha3.c \
+  hkdf_sha3_512/hkdf_sha3_512.c \
+  hmac_sha3/hmac_sha3.c \
+  ed25519/keypair.c \
+  ed25519/sign.c \
+  ed25519/fe.c \
+  ed25519/ge.c \
+  ed25519/sc.c \
+  platform/@TARGET_PLATFORM@/@TARGET_PLATFORM@.c \
+	plugins/plugins.c \
+
+sm_rs_asm_srcs = \
+  trap.S \
+  mprv.S \
+
+sm_rs_test_srcs =
+
+sm_rs_install_prog_srcs =
+
+sm_rs_crates = sm-rs
+
+sm_rs_provides = sm
