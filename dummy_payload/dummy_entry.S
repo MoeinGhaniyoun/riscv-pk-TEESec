@@ -70,330 +70,38 @@ _start:
   add x0, x0, x0
 
 
-# Enclave supervisor code
-  li x5, 0x80480000
-  li x6, 0x000012b7
-  sw x6, 0(x5)
-  li x6, 0x0092829b
-  sw x6, 4(x5)
-  li x6, 0x01329293
-  sw x6, 8(x5)
-  li x6, 0x50028293
-  sw x6, 12(x5)
-  # li x6, 0x10529073
-  li x6, 0x00000000 
-  sw x6, 16(x5)
-  #li x6, 0x10200072
-  li x6, 0x00000000
-  sw x6, 20(x5)
-
-# Enclave supervisor trap entry code
-  li x5, 0x80480500
-  li x6, 0x06a00893
-  sh x6, 0(x5)
-  li x6, 0x4505
-  sh x6, 4(x5)
-  li x6, 0x00000073
-  sw x6, 6(x5)
-
-
-# Enclave user code
-  li x5, 0x80481000
-  li x6, 0x000802b7
-  sw x6, 0(x5)
-  li x6, 0x0012829b
-  sw x6, 4(x5)
-  li x6, 0x00c29293
-  sw x6, 8(x5)
-  li x6, 0x000013b7
-  sw x6, 12(x5)
-  li x6, 0x00b3839b
-  sw x6, 16(x5)
-  li x6, 0x01339393
-  sw x6, 20(x5)
-  li x6, 0x42343237
-  sw x6, 24(x5)
-  li x6, 0x4322021b
-  sw x6, 28(x5)
-  li x6, 0x736481b7
-  sw x6, 32(x5)
-  li x6, 0x7321819b
-  sw x6, 36(x5)
-  li x6, 0x0241c1bb
-  sw x6, 40(x5)
-  li x6, 0x0232c23b
-  sw x6, 44(x5)
-  li x6, 0x00521663
-  sw x6, 48(x5)
-  li x6, 0x0003b303
-  sw x6, 52(x5)
-  li x6, 0x0002b403
-  sw x6, 56(x5)
-  li x6, 0x9086
-  sh x6, 60(x5)
-  li x6, 0x4505
-  sh x6, 62(x5)
-  li x6, 0x00000073
-  sw x6, 64(x5)
-
-# Enclave_2 data
-  li x4, 0x80580010
-  li x5, 0xdeadbeef
-  sd x5, 0(x4) 
-  li x4, 150
-  li x5, 0x80580020
-  li x6, 0x2222222222222222
+# Fuzzer_Added_Code_Start
+# Enclave data
+li x4, 150
+li x5, 0x80580020
+li x6, 0xdeadbeef
 looop:  sd x6, 0(x5)
-  addi x4, x4, -1
-  addi x5, x5, 8
-  bnez x4, looop
-
-
-
-  li sp, 0x80473000
-  jal pk_vm_init
-  jal set_trap_vector
-
-
-# Setup enclave arguments  
-  jal setup_enclave_args
-  la a0, argoman
-  li a7, SBI_SM_CREATE_ENCLAVE
-  ecall
-  jal setup_enclave_args_2
-  la a0, argoman_2
-  li a7, SBI_SM_CREATE_ENCLAVE
-  ecall
-
-# Reading SM memory and enclave memory
-  li a6, 0x80580010
-  li a5, 0x80480010
-  li a4, 0x44444444
-  li a7, 0x77777777
-  divw x5, a7, a4
-  divw a4, a7, x5
-  bne a4, a6, jafar
-  ld a6, 0(a5)
-
-
-# Run the first enclave
-jafar:li a5, 0x80475000
-  ld a5, 0(a5)
-  mv a0, a5
-  # li a7, SBI_SM_RUN_ENCLAVE
-  # ecall
-
-# Get a sense of legit root page table contents
-li x7, 0x80272010
-ld x7, 0(x7)
-csrr x8, satp
-
-
-
-
-# Load last byte of an adjacent page to enclave memory
-adjacent:li a4, 0x8047ffff
-  lb a5, 0(a4)
-
-
-# Check timing difference for multiplier
-Timing:li a4, 0x44444444
-  li a5, 0x55555555
-  li a0, 0x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  xor a5, a5, a4
-  and a5, a5, a0
-  xor a5, a5, a4
-  add a5, a5, a0
-  li a4, 0x44444444
-  li a5, 0x55555555
-  li a0, 0xffffffff
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  xor a5, a5, a4
-  and a5, a5, a0
-  xor a5, a5, a4
-  add a5, a5, a0
+addi x4, x4, -1
+addi x5, x5, 8
+bnez x4, looop
+# Setup enclave arguments
+jal setup_enclave_args
+la a0, TEESec_enclave
+li a7, SBI_SM_CREATE_ENCLAVE
+ecall
+li sp, 0x80473000
+jal pk_vm_init
+jal set_trap_vector
+# Reading enclave memory
+li a6, 0x80580020
+li a5, 0x80480010
+li a4, 0x44444444
+li a7, 0x77777777
+divw x5, a7, a4
+divw a4, a7, x5
+bne a4, a6, next
+ld a6, 0(a6)
+next:
+# Fuzzer_Added_Code_End
   
 
 
-# Jump to enclave memory
-jmpEnclave:li x4, 0x80480000
-  li a5, 0x80001000
-  li a4, 0x44444444
-  li a7, 0x77777777
-  divw x5, a7, a4
-  divw a3, a7, x5
-  divw a3, a7, a3
-  divw a3, a7, a3
-  bne a3, x4, mallagh
-  jalr x4
-  
-mallagh:divw a3, a7, a3
-  divw a3, a7 ,a3
-  bne a3, a6, mallagh2
-  jalr x4
-
-# Get the enclave data in the cache
-mallagh2:li x4, 0x80480010
-  li a5, 0x80880210
-  li a4, 0x44444444
-  li a7, 0x77777777
-  divw x5, a7, a4
-  divw a3, a7, x5
-  divw a3, a7, a3
-  divw a3, a7, a3
-  bne a3, x4, mallagh3
-  ld x5, 0(x4)
-  ld x4, 0(a5)
-
-# Change root page table to enclave memory
-mallagh3:csrr x5, satp
-  li x5, 0x8000000000080480
-  csrw satp, x5
-  li x5, 0x80780010
-  li a5, 0x80880210
-  li a4, 0x44444444
-  li a7, 0x77777777
-  divw a3, a5, a4
-  divw a3, a7, a3
-  divw a3, a7, a3
-  bne a3, x5, mallagh4
-  ld x5, 0(x5)
-mallagh4:add x0, x0, x0
-  add x0, x0, x0
-  li a0, 0x0
-  li a4, 0x2
-  li a5, 0x4
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  xor a5, a5, a4
-  and a5, a0, a5
-  xor a5, a5, a4
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  li a0, 0xffffffffffffffff
-  li a4, 0x2
-  li a5, 0x4
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  xor a5, a5, a4
-  and a5, a0, a5
-  xor a5, a5, a4
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  li a5, 0x80784210
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-  add x0, x0, x0
-# Destroy second enclave
-  li a3, 0x80780440
-  li a4, 0x44444444
-  li a7, 0x77777777
-  divw a7, a5, a4
-  divw a4, a3, a4
-  divw a7, a3, a4
-  bne a3, a7, mallagh5
-  ld a4, 0(a5)
-  ld a5, 0(a3)
-
-mallagh5:mv a0, a5
-  li a7, SBI_SM_DESTROY_ENCLAVE
-  ecall
-
-  li x14, 0x80271000
-  ld x14, 0(x14)
-  csrr x15, stvec
-  li x14, 0x80001000
-  ld x14, 0(x14)
-  li x15, 0xdeaddead
-  la s0, str
+la s0, str
 1:
   lbu a0, (s0)
   beqz a0, 1f
