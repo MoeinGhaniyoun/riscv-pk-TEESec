@@ -157,11 +157,11 @@ looop:  sd x6, 0(x5)
 
 # Setup enclave arguments  
   jal setup_enclave_args
-  la a0, argoman
+  la a0, TEESec_enclave
   li a7, SBI_SM_CREATE_ENCLAVE
   ecall
   jal setup_enclave_args_2
-  la a0, argoman_2
+  la a0, TEESec_enclave_2
   li a7, SBI_SM_CREATE_ENCLAVE
   ecall
 
