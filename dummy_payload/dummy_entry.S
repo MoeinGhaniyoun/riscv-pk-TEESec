@@ -71,32 +71,7 @@ _start:
 
 
 # Fuzzer_Added_Code_Start
-# Enclave data
-li x4, 150
-li x5, 0x80580020
-li x6, 0xdeadbeef
-looop:  sd x6, 0(x5)
-addi x4, x4, -1
-addi x5, x5, 8
-bnez x4, looop
-# Setup enclave arguments
-jal setup_enclave_args
-la a0, TEESec_enclave
-li a7, SBI_SM_CREATE_ENCLAVE
-ecall
-li sp, 0x80473000
-jal pk_vm_init
-jal set_trap_vector
-# Reading enclave memory
-li a6, 0x80580020
-li a5, 0x80480010
-li a4, 0x44444444
-li a7, 0x77777777
-divw x5, a7, a4
-divw a4, a7, x5
-bne a4, a6, next
-ld a6, 0(a6)
-next:
+
 # Fuzzer_Added_Code_End
   
 

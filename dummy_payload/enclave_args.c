@@ -7,7 +7,13 @@ struct keystone_sbi_create TEESec_enclave_4;
 
 
 //Fuzzer_Added_Code_Start
-void setup_enclave_args()
+
+//Fuzzer_Added_Code_End
+
+
+
+
+void setup_enclave_args_2()
 {
 TEESec_enclave.epm_region.paddr = 0x80580000;
 TEESec_enclave.epm_region.size = 0x500;
