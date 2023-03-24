@@ -69,6 +69,9 @@ _start:
   add x0, x0, x0
   add x0, x0, x0
 
+# Fuzzer_Added_Code_Start
+
+# Fuzzer_Added_Code_End
 
 # Enclave supervisor code
   li x5, 0x80480000
@@ -156,10 +159,10 @@ looop:  sd x6, 0(x5)
 
 
 # Setup enclave arguments  
-  jal setup_enclave_args
-  la a0, TEESec_enclave
-  li a7, SBI_SM_CREATE_ENCLAVE
-  ecall
+#  jal setup_enclave_args
+#  la a0, TEESec_enclave
+#  li a7, SBI_SM_CREATE_ENCLAVE
+#  ecall
   jal setup_enclave_args_2
   la a0, TEESec_enclave_2
   li a7, SBI_SM_CREATE_ENCLAVE
@@ -173,15 +176,15 @@ looop:  sd x6, 0(x5)
   divw x5, a7, a4
   divw a4, a7, x5
   bne a4, a6, jafar
-  ld a6, 0(a5)
+  ld a6, 0(a6)
 
 
 # Run the first enclave
 jafar:li a5, 0x80475000
   ld a5, 0(a5)
   mv a0, a5
-  # li a7, SBI_SM_RUN_ENCLAVE
-  # ecall
+  li a7, SBI_SM_RUN_ENCLAVE
+  ecall
 
 # Get a sense of legit root page table contents
 li x7, 0x80272010
